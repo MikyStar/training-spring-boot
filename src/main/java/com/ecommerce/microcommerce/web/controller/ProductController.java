@@ -32,7 +32,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 
-@Api( description="API pour es opérations CRUD sur les produits.")
+@Api(description="API pour es opérations CRUD sur les produits.")
 
 @RestController
 public class ProductController {
@@ -42,10 +42,8 @@ public class ProductController {
     
     private final String ADMIN_TOKEN = "Admin";
 
-    //Récupérer la liste des produits
-
+    @ApiOperation(value = "Récupère la liste des produits")
     @RequestMapping(value = "/Produits", method = RequestMethod.GET)
-
     public MappingJacksonValue listeProduits() {
 
         Iterable<Product> produits = productDao.findAll();
@@ -61,10 +59,8 @@ public class ProductController {
         return produitsFiltres;
     }
 
-    //Récupérer un produit par son Id
-    @ApiOperation(value = "Récupère un produit grâce à son ID à condition que celui-ci soit en stock!")
+    @ApiOperation(value = "Récupère un produit par son ID à condition que celui-ci soit en stock!")
     @GetMapping(value = "/Produits/{id}")
-
     public Product afficherUnProduit(@PathVariable int id) {
 
     	Product produit = productDao.findById(id);
@@ -74,9 +70,8 @@ public class ProductController {
         return produit;
     }
 
-    //ajouter un produit
+    @ApiOperation(value = "Ajoute un produit à la liste des produits")
     @PostMapping(value = "/Produits")
-
     public ResponseEntity<Void> ajouterProduit(@Valid @RequestBody Product product) {
 
         Product productAdded =  productDao.save(product);
@@ -97,31 +92,31 @@ public class ProductController {
         return ResponseEntity.created(location).build();
     }
 
+    @ApiOperation(value = "Supprime le produit correspondant à l'ID donné, si celui-ci existe")
     @DeleteMapping (value = "/Produits/{id}")
     public void supprimerProduit(@PathVariable int id) {
-
         productDao.delete(id);
     }
 
+    @ApiOperation(value = "Modifie un produit de la liste")
     @PutMapping (value = "/Produits")
     public void updateProduit(@RequestBody Product product) {
-
         productDao.save(product);
     }
 
+    @ApiOperation(value = "Récupère la liste des marges réalisées sur chaque produit si le token passé en paramètre correspond au token administrateur")
     @GetMapping(value = "/AdminProduits")
-    public HashMap<Product, Integer> getMarges()
-    {    	
+    public HashMap<Product, Integer> getMarges() {    	
     	HashMap <Product, Integer> map = new HashMap<Product, Integer>();
     	for(Product p : productDao.findAll()){
     		map.put(p, p.getPrix()-p.getPrixAchat());
     	}
-    	
 		return map;
     }
     
+    @ApiOperation(value = "Récupère la liste des produits par ordre alphabétique. Si le token administrateur est valide, les prix d'achat sont affichés")
     @GetMapping(value = "/AdminProduitsAlphabetique/{token}")
-    public List<Product> affichageAlphabetique(@PathVariable String token){
+    public List<Product> affichageAlphabetique(@PathVariable String token) {
     	System.out.println( "token " + token );
     	if( token.equals( ADMIN_TOKEN ) ){
     		System.out.println("true");
@@ -130,13 +125,11 @@ public class ProductController {
     		System.out.println("false");
     		return productDao.trierProduitsParOrdreAlphabetique();
     	}
-    	
     }
     
-    //Pour les tests
+    @ApiOperation(value = "Récupère la liste des produits vendus à un prix strictement supérieur au prix passé en paramètre")
     @GetMapping(value = "test/produits/{prix}")
     public List<Product>  testeDeRequetes(@PathVariable int prix) {
-
         return productDao.chercherUnProduitCher(400);
     }
 

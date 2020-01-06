@@ -8,21 +8,27 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Min;
 
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
 //@JsonFilter("monFiltreDynamique")
 public class Product {
 
     @Id
     @GeneratedValue
+    @ApiModelProperty(notes="ID du produit", name="id", required=true)
     private int id;
 
     @Length(min=3, max=20, message = "Nom trop long ou trop court. Et oui messages sont plus stylés que ceux de Spring")
+    @ApiModelProperty(notes="Nom du produit", name="nom", required=true)
     private String nom;
 
     @Min(value = 1)
+    @ApiModelProperty(notes="Prix de vente du produit", name="prix", required=true)
     private int prix;
 
     //information que nous ne souhaitons pas exposer
+    @ApiModelProperty(notes="Prix d'achat du produit", name="prixAchat", required=true)
     private int prixAchat;
 
     //constructeur par défaut
