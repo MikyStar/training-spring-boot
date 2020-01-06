@@ -39,6 +39,8 @@ public class ProductController {
 
     @Autowired
     private ProductDao productDao;
+    
+    private final String ADMIN_TOKEN = "Admin";
 
     //Récupérer la liste des produits
 
@@ -107,24 +109,25 @@ public class ProductController {
         productDao.save(product);
     }
 
-    @GetMapping(value = "/AdminProduits/{token}")
-    public HashMap<Product, Integer> getMarges(String token){
-    	
+    @GetMapping(value = "/AdminProduits")
+    public HashMap<Product, Integer> getMarges()
+    {    	
     	HashMap <Product, Integer> map = new HashMap<Product, Integer>();
     	for(Product p : productDao.findAll()){
     		map.put(p, p.getPrix()-p.getPrixAchat());
     	}
     	
 		return map;
-    	
     }
     
     @GetMapping(value = "/AdminProduitsAlphabetique/{token}")
     public List<Product> affichageAlphabetique(@PathVariable String token){
-    	
-    	if(token.equals("Admin")){
+    	System.out.println( "token " + token );
+    	if( token.equals( ADMIN_TOKEN ) ){
+    		System.out.println("true");
     		return productDao.trierProduitsParOrdreAlphabetiqueAdmin();
     	} else {
+    		System.out.println("false");
     		return productDao.trierProduitsParOrdreAlphabetique();
     	}
     	
