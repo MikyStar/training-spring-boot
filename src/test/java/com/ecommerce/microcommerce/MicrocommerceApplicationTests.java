@@ -25,6 +25,8 @@ import com.ecommerce.microcommerce.web.controller.ProductController;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.hamcrest.Matchers.is;
 
+import static org.hamcrest.Matchers.*;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class MicrocommerceApplicationTests {
@@ -39,6 +41,9 @@ public class MicrocommerceApplicationTests {
 	
 	ProductController productController;
 	
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	private final int DEFAULT_PRODUCTS_LENGTH = 3;
 	
 	@Before
 	public void setup() throws Exception {
@@ -56,4 +61,20 @@ public class MicrocommerceApplicationTests {
 			.andExpect( jsonPath( "$.nom" ).value( "Ordinateur portable" ) );
 	}
 
+	@Test
+	/** @see https://blog.zenika.com/2016/11/25/spring-mvc-test-dans-un-contexte-securise/ */
+	public void testAddProduct() throws Exception 
+	{
+		// ArrayList<Product> products = ( ArrayList<Product> ) productDao.findAll();
+	}
+	
+	@Test
+	public void testGetAllProducts() throws Exception 
+	{
+		// ArrayList<Product> products = ( ArrayList<Product> ) productDao.findAll();
+		
+		this.mockMvc.perform( get( "/Produits" ).accept( MediaType.APPLICATION_JSON ) )
+			.andExpect( status().isOk() )
+			.andExpect( jsonPath( "$", hasSize( DEFAULT_PRODUCTS_LENGTH ) ) );
+	}
 }
