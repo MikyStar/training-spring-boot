@@ -103,6 +103,6 @@ public class ProductController {
         return productDao.chercherUnProduitCher(400);
     }
 
-
+    // Test commit
 
 }
