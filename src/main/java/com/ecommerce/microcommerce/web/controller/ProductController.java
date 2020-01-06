@@ -103,6 +103,10 @@ public class ProductController {
         return productDao.chercherUnProduitCher(400);
     }
 
+    private float calculerMargeProduit( Product produit )
+    {
+    	return produit.getPrixAchat() - produit.getPrix();
+    }
     // Test commit
 
 }
